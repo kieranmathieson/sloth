@@ -1,0 +1,119 @@
+<?php
+
+/**
+ * @file
+ * Contains sloth.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityInterface;
+//use Drupal\Component\Utility\Html;
+use Drupal\sloth\SlothTagHandler;
+
+/**
+ * Implements hook_help().
+ * @param $route_name
+ * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+ * @return string
+ */
+function sloth_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the sloth module.
+    case 'help.page.sloth':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Testing the shard idea with sloths.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+
+/**
+ * Implements hook_form_alter() on behalf of sloth.module.
+ *
+ * Check whether the user is able to edit the sloth shard.
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ */
+function sloth_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+//  if ( ! \Drupal::currentUser()->hasPermission('edit sloth shard field manually') ) {
+//    $form['field_shard']['#type'] = 'hidden';
+//  }
+//  else {
+    $form['actions']['submit']['#submit'][] = 'sloth_replace_tags_on_form_submit';
+    $form['actions']['preview']['#submit'][] = 'sloth_replace_tags_on_form_submit';
+    $form['actions']['publish']['#submit'][] = 'sloth_replace_tags_on_form_submit';
+//  $form_state->getFormObject()->getEntity()
+//  }
+}
+
+/**
+ * @param array $build
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ * @param \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display
+ */
+function sloth_node_view_alter(array &$build,
+                               \Drupal\Core\Entity\EntityInterface $entity,
+                               \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display) {
+  $r=7;
+}
+
+
+function sloth_expand_tag(&$html) {
+  return FALSE;
+}
+
+
+function sloth_expand_tags( $build, $entity ) {
+}
+
+/**
+ * Implements hook_node_presave().
+ *
+ * Find sloth tags coming from CK. Refactor them into storage format.
+ * Update the shard field appropriately.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ */
+function sloth_node_presave(EntityInterface $entity) {
+  return;
+  //Is this a node?
+  if ( $entity->getEntityTypeId() != 'node' ) {
+    return;
+  }
+  $sloth_tag_handler = new SlothTagHandler(
+    \Drupal::service('config.factory'),
+    \Drupal::service('entity_field.manager')
+  );
+  //Get the names of the fields that are eligible for sloths.
+  $eligible_fields = $sloth_tag_handler->listFieldsEligibleForSlothEmbedding($entity);
+  //For each field
+  foreach ($eligible_fields as $eligible_field) {
+    $r=9;
+    $values = $entity->get($eligible_field)->getValue();
+//    foreach($entity->get('field_toys')->getValue()){}
+  }
+
+  //Find embeddings of sloths in the field.
+
+  //Remove them.
+//  $tag_found = false;
+//  do {
+//
+//    //Find the first sloth tag.
+//    //Update the tag's attributes.
+//    //Store embed info in the tags shard field.
+//  } while ($tag_found);
+
+}
+
+function sloth_replace_tags_on_form_submit($form, &$form_state) {
+  $sloth_tag_handler = new SlothTagHandler(
+    \Drupal::service('config.factory'),
+    \Drupal::service('entity_field.manager')
+  );
+}

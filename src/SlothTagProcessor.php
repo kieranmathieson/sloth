@@ -25,22 +25,6 @@ class SlothTagProcessor {
   protected $html;
 
   /**
-   * @return string
-   */
-  public function getHtml() {
-    return $this->html;
-  }
-
-  /**
-   * @param string $html
-   * @return SlothTagProcessor
-   */
-  public function setHtml($html) {
-    $this->html = $html;
-    return $this;
-  }
-
-  /**
    * HTML state is not known.
    *
    * @var int
@@ -101,6 +85,22 @@ class SlothTagProcessor {
       [self::DB_STORAGE, self::READY_FOR_EDITING],
       [self::READY_FOR_EDITING, self::DB_STORAGE],
     ];
+  }
+
+  /**
+   * @return string
+   */
+  public function getHtml() {
+    return $this->html;
+  }
+
+  /**
+   * @param string $html
+   * @return SlothTagProcessor
+   */
+  public function setHtml($html) {
+    $this->html = $html;
+    return $this;
   }
 
   public function transition($start_state, $end_state) {

@@ -9,6 +9,7 @@
 namespace Drupal\sloth;
 
 //use Drupal\Core\Routing\RouteMatchInterface;
+//use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityInterface;
 //use Drupal\Component\Utility\Html;
@@ -135,41 +136,42 @@ class SlothTagHandler {
   }
 
 public function processSlothTagsOnNodeEditForm(FormStateInterface $form_state) {
-  $entity = $form_state->getFormObject()->getEntity();
-  if ( $entity->getEntityTypeId() != 'node' ) {
-    return;
-  }
-  //Get the names of the fields that are eligible for sloths.
-  $eligible_fields = $this->listFieldsEligibleForSlothEmbedding($entity);
+//  $entity = $form_state->getFormObject()->getEntity();
+//
+//  if ( $entity->getEntityTypeId() != 'node' ) {
+//    return;
+//  }
+//  //Get the names of the fields that are eligible for sloths.
+//  $eligible_fields = $this->listFieldsEligibleForSlothEmbedding($entity);
 
 
 
-  $form_values = $form_state->getValues();
-  //For each field on the form...
-  $data_changed = false;
-  foreach( $form_values as $field_name => $field_values ) {
-    //Is the field one that can be slothed?
-    if ( in_array($field_name, $eligible_fields) ) {
-      //Aye. Go over each of its values (could be multivalued).
-      foreach ($field_values as $key => $field_value) {
-        //Push the HTML into the processor.
-        $sloth_tag_handler->setHtmlPreprocessing($field_value['value']);
-        //Process, checking whether there were any changes.
-        if ( $sloth_tag_handler->processSlothTags() ) {
-          //Save the new data into the values array.
-          $form_values[$field_name][$key]['value']
-            = $sloth_tag_handler->getHtmlPostProcessing();
-          //Set flag to show there have been changes.
-          $data_changed = true;
-        }
-      } //End for each value in multi-valued field.
-    } //End field is eligible for slothing.
-
-  } //End foreach field on the form.
-  //Were any changes made to the form fields?
-  if ( $data_changed ) {
-    $form_state->setValues($form_values);
-  }
+//  $form_values = $form_state->getValues();
+//  //For each field on the form...
+//  $data_changed = false;
+//  foreach( $form_values as $field_name => $field_values ) {
+//    //Is the field one that can be slothed?
+//    if ( in_array($field_name, $eligible_fields) ) {
+//      //Aye. Go over each of its values (could be multivalued).
+//      foreach ($field_values as $key => $field_value) {
+//        //Push the HTML into the processor.
+//        $sloth_tag_handler->setHtmlPreprocessing($field_value['value']);
+//        //Process, checking whether there were any changes.
+//        if ( $sloth_tag_handler->processSlothTags() ) {
+//          //Save the new data into the values array.
+//          $form_values[$field_name][$key]['value']
+//            = $sloth_tag_handler->getHtmlPostProcessing();
+//          //Set flag to show there have been changes.
+//          $data_changed = true;
+//        }
+//      } //End for each value in multi-valued field.
+//    } //End field is eligible for slothing.
+//
+//  } //End foreach field on the form.
+//  //Were any changes made to the form fields?
+//  if ( $data_changed ) {
+//    $form_state->setValues($form_values);
+//  }
 
 }
 

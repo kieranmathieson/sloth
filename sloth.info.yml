@@ -4,4 +4,7 @@ description: Testing the shard idea with sloths.
 core: 8.x
 package: Shards
 dependencies:
-  - shard_base
+  - field
+  - ckeditor
+  - field_collection
+  - rest

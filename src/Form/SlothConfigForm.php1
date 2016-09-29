@@ -1,13 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: kieran
- * Date: 9/20/16
- * Time: 2:42 PM
+ * @file
+ * Configuration for the sloth module.
+ *
+ * @author Kieran Mathieson
  */
 
 namespace Drupal\sloth\Form;
-
 
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Form\FormBase;

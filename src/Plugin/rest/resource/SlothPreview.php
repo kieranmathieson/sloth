@@ -3,17 +3,17 @@
 namespace Drupal\sloth\Plugin\rest\resource;
 
 use Drupal\Core\Session\AccountProxyInterface;
-use Drupal\entity_embed\Exception\EntityNotFoundException;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Psr\Log\LoggerInterface;
-use Drupal\Core\TypedData\Exception\MissingDataException;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\sloth\Exceptions\SlothMissingDataException;
+use Drupal\sloth\Exceptions\SlothUnexptectedValueException;
+use Drupal\sloth\Exceptions\SlothNotFoundException;
 
 /**
  * Provides a REST resource to get a display (view) of a sloth.
@@ -40,6 +40,7 @@ class SlothPreview extends ResourceBase {
   protected $entity_type_manager;
   /* @var \Drupal\Core\Render\RendererInterface $renderer */
   protected $renderer;
+
   /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
    *
@@ -55,6 +56,9 @@ class SlothPreview extends ResourceBase {
    *   A logger instance.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   A current user instance.
+   * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $entity_display_repository
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Render\RendererInterface $renderer
    */
   public function __construct(
     array $configuration,
@@ -105,18 +109,18 @@ class SlothPreview extends ResourceBase {
     }
     //Were both params given?
     if ( is_null($nid) || is_null($view_mode) ) {
-      throw new MissingDataException($this->t('Missing argument getting sloth display.'));
+      throw new SlothMissingDataException($this->t('Missing argument getting sloth display.'));
     }
     //Does the view mode exist?
     $all_view_modes = $this->entity_display_repository->getViewModes('node');
     if ( ! key_exists($view_mode, $all_view_modes) ) {
-      throw new UnexpectedValueException($this->t('Unknown sloth view mode: ' . $view_mode));
+      throw new SlothUnexptectedValueException($this->t('Unknown sloth view mode: ' . $view_mode));
     }
     //Load the sloth.
     $sloth_node = $this->entity_type_manager->getStorage('node')->load($nid);
     //Does the sloth exist?
     if ( is_null($sloth_node) ) {
-      throw new EntityNotFoundException('Cannot find sloth ' . $nid);
+      throw new SlothNotFoundException('Cannot find sloth ' . $nid);
     }
     //Render the selected display of the sloth.
     $view_builder = $this->entity_type_manager->getViewBuilder('node');

@@ -303,11 +303,11 @@ class SlothConfigForm extends FormBase {
 
   /**
    * Was at least one option chosen from a checkbox list?
-   * @param $form_state Form state.
-   * @param $field_name Field to check.
+   * @param FormStateInterface $form_state Form state.
+   * @param string $field_name Field to check.
    * @return bool True if a value was chosen, else false.
    */
-  protected function at_least_one_chosen($form_state, $field_name) {
+  protected function at_least_one_chosen(FormStateInterface $form_state, $field_name) {
     $submitted = $form_state->getValue($field_name);
     $chosen = FALSE;
     foreach ($submitted as $key => $is_selected) {

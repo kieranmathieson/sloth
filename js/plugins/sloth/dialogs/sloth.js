@@ -21,7 +21,7 @@
       minWidth: 200,
       maxWidth: 480,
       minHeight: 200,
-      maxHeight: 400,
+      maxHeight: 480,
       slothList: [], // new Array(),
       // Dialog window contents definition.
       contents: [
@@ -47,7 +47,7 @@
               default: Drupal.SlothSpace.slothOptions[0][1],
               setup: function( widget ) {
                 if ( widget.data.slothId && widget.data.slothId != 'empty'){
-                  console.log('Sloth field setup for: ' + widget.data.slothId);
+                  // console.log('Sloth field setup for: ' + widget.data.slothId);
                   this.setValue(widget.data.slothId);
                 }
                 else {
@@ -55,7 +55,7 @@
                 }
               },
               onChange: function(evnt) {
-                console.log('Start sloth onchange. getValue:' + this.getValue());
+                // console.log('Start sloth onchange. getValue:' + this.getValue());
                 //Get the selected nid.
                 var selectedNid = this.getValue();
                 var sloths = Drupal.SlothSpace.collections.pack;
@@ -64,33 +64,30 @@
                   .then(function(){
                     var previewContent = selectedModel.getPreview(editor.SlothSpace.currentViewMode);
                     editor.SlothSpace.previewElement.html(previewContent);
-                    // console.log('Showing preview for nid: ' + selectedModel.get('nid'));
-                    // editor.SlothSpace.views.preview.model = selectedModel;
-                    // editor.SlothSpace.views.preview.render(editor.SlothSpace.currentViewMode);
                   });
               },
               commit: function( widget ) {
                 widget.setData( 'slothId', this.getValue() );
               },
               loadPreview: function(selectedModel, viewMode) {
-                console.log('Start sloth load preview');
+                // console.log('Start sloth load preview');
                 if ( ! selectedModel ) {
-                  console.log('Nothing selected. Leave.');
+                  // console.log('Nothing selected. Leave.');
                   return;
                 }
-                console.log('Loading preview. nid: '
-                  + selectedModel.get('nid') + ' view mode' + viewMode );
+                // console.log('Loading preview. nid: '
+                //   + selectedModel.get('nid') + ' view mode' + viewMode );
                 //Already got the preview?
                 if ( selectedModel.isPreviewSet(viewMode) ) {
-                  console.log('Load preview: already got it.');
+                  // console.log('Load preview: already got it.');
                   return;
                 }
-                console.log('dinna have preview');
+                // console.log('dinna have preview');
                 var deferred = $.Deferred();
                 editor.SlothSpace.previewElement.html(Drupal.SlothSpace.loadingIndicator);
                 $.when( selectedModel.fetch(viewMode) )
                   .then(function(){
-                    console.log('Got preview.');
+                    // console.log('Got preview.');
                     deferred.resolve();
                   });
                 return deferred.promise();
@@ -104,7 +101,7 @@
               default: Drupal.SlothSpace.viewModeOptions[0][1],
               setup: function( widget ) {
                 if ( widget.data.viewMode && widget.data.viewMode != 'empty') {
-                  console.log('View mode field setup for: ' + widget.data.viewMode);
+                  // console.log('View mode field setup for: ' + widget.data.viewMode);
                   this.setValue(widget.data.viewMode);
                 }
                 else {
@@ -112,20 +109,19 @@
                 }
               },
               onChange: function(evnt) {
-                console.log('Start view mode onchange');
+                // console.log('Start view mode onchange');
                 if ( ! $('#' + this.domId).is(":visible") || Drupal.SlothSpace.collections.viewModes.length == 1 ) {
-                  console.log('Only one. Leaving.');
+                  // console.log('Only one. Leaving.');
                   return;
                 }
                 //Get the selected nid.
-                console.log('getValue:' + this.getValue());
-                var selectedMode = this.getValue();
-                editor.SlothSpace.currentViewMode = selectedMode;
+                // console.log('getValue:' + this.getValue());
+                editor.SlothSpace.currentViewMode = this.getValue();
                 //Trigger the sloth select to change, to redo preview.
                 var slothSelect = this.getDialog().getContentElement('tab-basic', 'slothSelect');
                 var selectedSloth = slothSelect.getValue();
-                console.log('Selected sloth:' + selectedSloth);
-                console.log('triggering sloth select');
+                // console.log('Selected sloth:' + selectedSloth);
+                // console.log('triggering sloth select');
                 slothSelect.setValue(selectedSloth);
               },
               commit: function( widget ) {
@@ -149,17 +145,17 @@
         }
       ],
       onShow: function() {
-        console.log('start on show');
+        // console.log('start on show');
         editor.SlothSpace.previewElement = $('#'
           + this.getContentElement( 'tab-basic', 'preview' ).domId
           + ' .sloth-preview');
         // editor.SlothSpace.views.preview = new Drupal.SlothSpace.views.SlothPreview();
         //Setup the view modes.
-        console.log('Init view modes. Length: ' + Drupal.SlothSpace.collections.viewModes.length);
+        // console.log('Init view modes. Length: ' + Drupal.SlothSpace.collections.viewModes.length);
         var viewModeWidget = this.definition.dialog.getContentElement('tab-basic', 'viewModeSelect');
         if ( Drupal.SlothSpace.collections.viewModes.length == 1 ) {
           //There's just one available, so it is the Chosen One.
-          console.log('Just one view mode exists');
+          // console.log('Just one view mode exists');
           editor.SlothSpace.currentViewMode
             = Drupal.SlothSpace.collections.viewModes.models[0].get('machineName');
           $('#' + viewModeWidget.domId).hide();

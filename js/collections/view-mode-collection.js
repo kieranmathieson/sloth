@@ -11,9 +11,7 @@
   Drupal.SlothSpace.collections.Folio = Backbone.Collection.extend({
       model: Drupal.SlothSpace.models.ViewMode,
       url: function(){
-        var result = '/sloth/view-modes?_format=json';
-        console.log('Sloth view mode collection URL: ' + result);
-        return result;
+        return '/sloth/view-modes?_format=json';
       }
   });
 

@@ -23,3 +23,4 @@ sloth:
     - core/drupal
     - core/jquery
     - core/backbone
+    - core/drupalSettings

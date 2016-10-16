@@ -5,7 +5,8 @@
 (function ($, Drupal) {
 
   "use strict";
-  console.log('start');
+
+
 
   CKEDITOR.plugins.add('sloth', {
       requires: 'widget',
@@ -14,7 +15,7 @@
         //Create a place for this plugin to keep state.
         editor.SlothSpace = {};
         editor.SlothSpace.views = {};
-        console.log('ck plug init');
+        // console.log('ck plug init');
         CKEDITOR.dialog.add('sloth', this.path + 'dialogs/sloth.js');
         var path = this.path;
         editor.addContentsCss(path + 'css/sloth.css');
@@ -31,25 +32,32 @@
             }
           },
           //Add to content that ACF will allow.
-          allowedContent: 'div(!shard-sloth);'
+          allowedContent: 'div(!sloth-shard);'
           + 'div[*](*){*};p(*);',
           extraAllowedContent: '*[*]{*}(*)',
-          requiredContent: 'div(shard-sloth);', //[data-shard-type=sloth]',
+          requiredContent: 'div(sloth-shard);', //[data-shard-type=sloth]',
           upcast: function (element) {
-            return element.name == 'div' && element.hasClass('shard-sloth');// element.getAttribute( 'data-shard-type' ) == 'sloth';
+            return element.name == 'div' && element.hasClass('sloth-shard');// element.getAttribute( 'data-shard-type' ) == 'sloth';
           },
           // Downcast the element.
           downcast: function (element) {
-            // Only keep the wrapping element.
-            element.setHtml('');
+            element.attributes['data-shard-type'] = 'sloth';
+            element.attributes.class = 'sloth-shard';
+
+            // var localContent = '';
+            // if ( $(element.getHtml()).find('.local-content').length > 0 ) {
+            //   localContent = $(element.getHtml()).find('.local-content').html()
+            // }
+            // // Only keep the wrapping element.
+            // element.setHtml(localContent);
             // Remove the auto-generated ID.
             // delete element.attributes.id;
             return element;
           },
           init: function () {
             //Sloth nid
-            if (this.element.hasAttribute('data-id')) {
-              this.setData('slothId', this.element.getAttribute('data-id'));
+            if (this.element.hasAttribute('data-sloth-id')) {
+              this.setData('slothId', this.element.getAttribute('data-sloth-id'));
             }
             //View mode
             if (this.element.hasAttribute('data-view-mode')) {
@@ -64,7 +72,7 @@
             if (editor.SlothSpace.currentPreview) {
               this.element.setHtml(editor.SlothSpace.currentPreview);
             }
-            this.element.setAttribute('data-id', this.data.slothId);
+            this.element.setAttribute('data-sloth-id', this.data.slothId);
             this.element.setAttribute('data-view-mode', this.data.viewMode);
             this.element.setAttribute('class', 'shard-sloth');
           }
@@ -74,8 +82,8 @@
           command: 'sloth'
         });
         var slothButton = editor.ui.get('sloth');
-        console.log('sloth button');
-        console.log(slothButton);
+        // console.log('sloth button');
+        // console.log(slothButton);
 
         editor.on("instanceReady", function() {
           //Data could already have been loaded by other instances.
@@ -87,8 +95,8 @@
               Drupal.SlothSpace.collections.pack.fetch()
               )
               .then(function () {
-                console.log(Drupal.SlothSpace.collections.pack);
-                console.log(Drupal.SlothSpace.collections.viewModes);
+                // console.log(Drupal.SlothSpace.collections.pack);
+                // console.log(Drupal.SlothSpace.collections.viewModes);
                 //Add MT previews to the sloths.
                 //Should be a cleaner way to do this.
                 $.each(Drupal.SlothSpace.collections.pack.models, function (index, sloth) {
@@ -109,7 +117,7 @@
                     Drupal.SlothSpace.collections.viewModes.models[i].get('machineName')
                   ]);
                 }
-                console.log('set up arrays');
+                // console.log('set up arrays');
                 editor.ui.get('sloth').setState(CKEDITOR.TRISTATE_OFF);
               });
           }

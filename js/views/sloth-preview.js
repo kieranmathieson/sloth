@@ -13,7 +13,7 @@
       // console.log(html);
       //Next line is slimy hack, since at init this.$el is set, but this.el is not.
       //Don't know why. Suspect Satan's influence. (I used to be married to her... Ooo, burn!)
-      $(this.$el.selector).html(html)
+      $(this.$el.selector).html(html);
       //this.$el.html( html );
       return this;
     },
